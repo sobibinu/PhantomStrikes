@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;">
+  <!-- SQLi Icon -->
+  <symbol id="icon-sqli" viewBox="0 0 24 24">
+    <path d="M4 7v10h16V7H4zm14 8H6V9h12v6z" fill="currentColor"/>
+    <path d="M8 11h2v2H8v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2z" fill="currentColor"/>
+    <path d="M3 5L8 2v2h8V2l5 3v2H3V5z" fill="currentColor"/>
+    <path d="M8 20v2l-5-3v-2h18v2l-5 3v-2H8z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- XSS Icon -->
+  <symbol id="icon-xss" viewBox="0 0 24 24">
+    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 6h-2v2h2v2h-2v-2H7v-2h2V8H7V6h2v2h2V6h2v2h-2v2zm8 4h-6v2h6v-2zm0-4h-6v2h6V8z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- CSRF Icon -->
+  <symbol id="icon-csrf" viewBox="0 0 24 24">
+    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.16L19 7v4c0 4.52-3.18 8.68-7 9.76-3.82-1.08-7-5.24-7-9.76V7l7-3.84z" fill="currentColor"/>
+    <path d="M11 7h2v6h-2V7zm0 8h2v2h-2v-2z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- LFI/RFI Icon -->
+  <symbol id="icon-file-inclusion" viewBox="0 0 24 24">
+    <path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z" fill="currentColor"/>
+    <path d="M8 12h8v2H8v-2zm0 4h8v2H8v-2zm0-8h2v2H8V8z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Directory Traversal Icon -->
+  <symbol id="icon-directory-traversal" viewBox="0 0 24 24">
+    <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="currentColor"/>
+    <path d="M11 16l-4-4 4-4v3h8v2h-8z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Authentication Issues Icon -->
+  <symbol id="icon-auth-issues" viewBox="0 0 24 24">
+    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Security Misconfigurations Icon -->
+  <symbol id="icon-misconfig" viewBox="0 0 24 24">
+    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Sensitive Data Exposure Icon -->
+  <symbol id="icon-data-exposure" viewBox="0 0 24 24">
+    <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- IDOR Icon -->
+  <symbol id="icon-idor" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Network Scan Icon -->
+  <symbol id="icon-network-scan" viewBox="0 0 24 24">
+    <path d="M15.9 5c-.17 0-.32.09-.41.23l-.07.15-5.18 11.65c-.16.29-.26.61-.26.96 0 1.11.9 2.01 2.01 2.01.96 0 1.77-.68 1.96-1.59l.01-.03L16.4 9.6l-1.42-3.93c-.12-.31-.29-.71-.5-.71zM2.53 19.65l1.34-1.34c.05-.05.09-.11.14-.16 1.06-1.06 2.47-1.65 3.96-1.65 1.49 0 2.9.59 3.96 1.65l1.34 1.34c.42.42 1.1.42 1.53 0 .42-.42.42-1.1 0-1.53l-1.34-1.34c-.18-.18-.39-.35-.61-.51 1.08-.93 2.41-1.62 3.87-1.62 1.49 0 2.9.59 3.96 1.65l1.34 1.34c.42.42 1.1.42 1.53 0 .42-.42.42-1.1 0-1.53l-1.34-1.34c-1.45-1.45-3.39-2.27-5.42-2.27s-3.97.82-5.42 2.27c-.51.51-1.13.83-1.79 1.02.55-2.28 2-4.15 4.09-5.17l-.53-1.43c-3.45 1.57-5.78 4.94-5.98 8.7-.79-.16-1.63-.62-2.33-1.31l-1.34-1.34c-.42-.42-1.1-.42-1.53 0-.42.41-.42 1.09 0 1.51z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Vulnerability Icon -->
+  <symbol id="icon-vulnerability" viewBox="0 0 24 24">
+    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L9 13.17l5.59-5.59L16 9l-6 6z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Warning Icon -->
+  <symbol id="icon-warning" viewBox="0 0 24 24">
+    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Security Icon -->
+  <symbol id="icon-security" viewBox="0 0 24 24">
+    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Shield Icon -->
+  <symbol id="icon-shield" viewBox="0 0 24 24">
+    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+  </symbol>
+  
+  <!-- Scan Icon -->
+  <symbol id="icon-scan" viewBox="0 0 24 24">
+    <path d="M9.5 6.5v3h-3v-3h3m3 0v3h-3v-3h3m3 0v3h-3v-3h3m-9 3v3h-3v-3h3m3 0v3h-3v-3h3m3 0v3h-3v-3h3m3 0v3h-3v-3h3m0-3v-3h3v3h-3m-10-3h-3v-2c0-1.1.9-2 2-2h2v3h-1v1zm5-2h3v3h-3v-3zm5 0h1c1.1 0 2 .9 2 2v2h-3v-4zM7 22h3v3h-3v-3zm5 0h3v3h-3v-3zm5 0h2c1.1 0 2-.9 2-2v-2h-3v3h-1v1zM7 16h3v3h-3v-3zm5 0h3v3h-3v-3zm5 0h3v3h-3v-3z" fill="currentColor"/>
+  </symbol>
+</svg>

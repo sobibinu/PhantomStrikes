@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">
+  <!-- Shield base -->
+  <path d="M100 15L30 40V95C30 138.63 59.73 176.63 100 190C140.27 176.63 170 138.63 170 95V40L100 15Z" fill="#1A202C" stroke="#4FD1C5" stroke-width="8"/>
+  
+  <!-- Eye shape -->
+  <circle cx="100" cy="90" r="40" fill="#2D3748"/>
+  <circle cx="100" cy="90" r="25" fill="#4FD1C5"/>
+  <circle cx="100" cy="90" r="12" fill="#1A202C"/>
+  
+  <!-- Scan lines -->
+  <path d="M40 90H80" stroke="#4FD1C5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M120 90H160" stroke="#4FD1C5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M100 50V70" stroke="#4FD1C5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M100 110V130" stroke="#4FD1C5" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Spider web lines to represent scanning -->
+  <path d="M65 55L85 75" stroke="#4FD1C5" stroke-width="2" stroke-linecap="round"/>
+  <path d="M135 55L115 75" stroke="#4FD1C5" stroke-width="2" stroke-linecap="round"/>
+  <path d="M65 125L85 105" stroke="#4FD1C5" stroke-width="2" stroke-linecap="round"/>
+  <path d="M135 125L115 105" stroke="#4FD1C5" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Glowing effect -->
+  <circle cx="100" cy="90" r="7" fill="white" opacity="0.5"/>
+</svg>
