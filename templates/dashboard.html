@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}PhantomStrike - Dashboard{% endblock %}
+
+{% block head %}
+<style>
+    .stat-card {
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-phantom-primary to-phantom-secondary rounded-lg shadow-lg p-6 mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-white mb-2">Welcome, {{ current_user.username }}</h1>
+                <p class="text-gray-300">Your security dashboard - manage and view your vulnerability scans</p>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <a href="{{ url_for('main.scan') }}" class="bg-phantom-accent hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                    <i class="fas fa-search mr-1"></i> New Scan
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Scans -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 stat-card">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-900 bg-opacity-40">
+                    <i class="fas fa-search text-blue-400 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-400 text-sm">Total Scans</p>
+                    <h3 class="text-2xl font-bold text-white">{{ scans|length }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vulnerabilities Found -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 stat-card">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-red-900 bg-opacity-40">
+                    <i class="fas fa-bug text-red-400 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-400 text-sm">Vulnerabilities Found</p>
+                    <h3 class="text-2xl font-bold text-white">
+                        {% set total_vulns = 0 %}
+                        {% for scan in scans %}
+                            {% set total_vulns = total_vulns + scan.total_vulnerabilities %}
+                        {% endfor %}
+                        {{ total_vulns }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- High Severity Issues -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 stat-card">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-red-900 bg-opacity-40">
+                    <i class="fas fa-radiation text-red-400 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-400 text-sm">High Severity</p>
+                    <h3 class="text-2xl font-bold text-white">
+                        {% set high_severity = 0 %}
+                        {% for scan in scans %}
+                            {% set high_severity = high_severity + scan.high_severity %}
+                        {% endfor %}
+                        {{ high_severity }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Scans -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 stat-card">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-900 bg-opacity-40">
+                    <i class="fas fa-calendar-check text-green-400 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-400 text-sm">Recent Scans</p>
+                    <h3 class="text-2xl font-bold text-white">
+                        {% set recent_count = 0 %}
+                        {% for scan in scans %}
+                            {% if scan.status == 'completed' %}
+                                {% set recent_count = recent_count + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ recent_count }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan History and Chart -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <!-- Vulnerability Distribution Chart -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 lg:col-span-1">
+            <h3 class="text-lg font-semibold mb-4 text-white">Vulnerability Distribution</h3>
+            <div class="flex justify-center">
+                <canvas id="vulnerabilityChart" width="300" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Scan History -->
+        <div class="bg-phantom-secondary rounded-lg shadow-md lg:col-span-2">
+            <div class="px-6 py-4 border-b border-gray-700">
+                <h3 class="text-lg font-semibold text-white">Recent Scan History</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-phantom-primary">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Target</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Scan Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Vulnerabilities</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-phantom-secondary divide-y divide-gray-700">
+                        {% if scans %}
+                            {% for scan in scans %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                                    {{ scan.target_url | truncate(30) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {% if scan.scan_type == 'light' %}bg-blue-800 text-blue-100
+                                        {% elif scan.scan_type == 'medium' %}bg-yellow-800 text-yellow-100
+                                        {% elif scan.scan_type == 'deep' %}bg-red-800 text-red-100
+                                        {% else %}bg-purple-800 text-purple-100{% endif %}">
+                                        {{ scan.scan_type }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {% if scan.status == 'completed' %}bg-green-800 text-green-100
+                                        {% elif scan.status == 'running' %}bg-blue-800 text-blue-100
+                                        {% elif scan.status == 'failed' %}bg-red-800 text-red-100
+                                        {% else %}bg-yellow-800 text-yellow-100{% endif %}">
+                                        {{ scan.status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    {{ scan.start_time | replace('T', ' ') | truncate(16, True, '') if scan.start_time else 'N/A' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <div class="flex space-x-1">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-900 text-red-100">
+                                            H: {{ scan.high_severity }}
+                                        </span>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-800 text-yellow-100">
+                                            M: {{ scan.medium_severity }}
+                                        </span>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-800 text-green-100">
+                                            L: {{ scan.low_severity }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <a href="{{ url_for('main.scan_result', scan_id=scan.id) }}" class="text-phantom-accent hover:text-teal-300">
+                                        View Results
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-300">
+                                    No scan history yet. <a href="{{ url_for('main.scan') }}" class="text-phantom-accent hover:text-teal-300">Start your first scan</a>.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 hover:bg-phantom-primary transition duration-300">
+            <a href="{{ url_for('main.scan') }}" class="flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-phantom-accent mb-4">
+                    <i class="fas fa-search text-white text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-white">New Scan</h3>
+                <p class="text-sm text-gray-400">Start a new vulnerability scan</p>
+            </a>
+        </div>
+        
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 hover:bg-phantom-primary transition duration-300">
+            <a href="{{ url_for('main.scan') }}?type=network" class="flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-phantom-accent mb-4">
+                    <i class="fas fa-network-wired text-white text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-white">Network Scan</h3>
+                <p class="text-sm text-gray-400">Scan network infrastructure</p>
+            </a>
+        </div>
+        
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 hover:bg-phantom-primary transition duration-300">
+            <a href="{{ url_for('auth.profile') }}" class="flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-phantom-accent mb-4">
+                    <i class="fas fa-user-shield text-white text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-white">Profile</h3>
+                <p class="text-sm text-gray-400">Manage your account</p>
+            </a>
+        </div>
+        
+        <div class="bg-phantom-secondary rounded-lg shadow-md p-6 hover:bg-phantom-primary transition duration-300">
+            <a href="#" id="exportAllResults" class="flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-phantom-accent mb-4">
+                    <i class="fas fa-file-export text-white text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-white">Export All</h3>
+                <p class="text-sm text-gray-400">Export all scan results</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calculate total vulnerabilities by severity
+    let highSeverity = 0;
+    let mediumSeverity = 0;
+    let lowSeverity = 0;
+    
+    {% for scan in scans %}
+        highSeverity += {{ scan.high_severity }};
+        mediumSeverity += {{ scan.medium_severity }};
+        lowSeverity += {{ scan.low_severity }};
+    {% endfor %}
+    
+    // Create vulnerability chart
+    const ctx = document.getElementById('vulnerabilityChart').getContext('2d');
+    const vulnerabilityChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['High', 'Medium', 'Low'],
+            datasets: [{
+                data: [highSeverity, mediumSeverity, lowSeverity],
+                backgroundColor: [
+                    '#F56565', // red for high
+                    '#ED8936', // orange for medium
+                    '#48BB78'  // green for low
+                ],
+                borderColor: '#2D3748',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'bottom',
+                labels: {
+                    fontColor: '#E2E8F0',
+                    fontSize: 12,
+                    padding: 20
+                }
+            },
+            tooltips: {
+                backgroundColor: '#1A202C',
+                titleFontColor: '#E2E8F0',
+                bodyFontColor: '#E2E8F0',
+                bodySpacing: 4,
+                xPadding: 12,
+                mode: 'nearest',
+                intersect: 0,
+                position: 'nearest'
+            },
+            cutoutPercentage: 70
+        }
+    });
+
+    // Toggle user menu
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userMenu = document.getElementById('user-menu');
+    
+    if (userMenuButton && userMenu) {
+        userMenuButton.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Export all results button - show modal with export options
+    const exportAllButton = document.getElementById('exportAllResults');
+    if (exportAllButton) {
+        exportAllButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('To export all results, please select a specific scan from the history.');
+        });
+    }
+});
+</script>
+{% endblock %}

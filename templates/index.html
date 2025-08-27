@@ -1,0 +1,531 @@
+{% extends "base.html" %}
+
+{% block title %}PhantomStrike - Advanced Web Vulnerability Scanner{% endblock %}
+
+{% block head %}
+<style>
+    .hero-bg {
+        position: relative;
+        overflow: hidden;
+    }
+    #animation-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        background-color: rgba(26, 32, 44, 0.7);
+        border-radius: 1rem;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+    .glow-effect {
+        text-shadow: 0 0 10px rgba(79, 209, 197, 0.5), 0 0 20px rgba(79, 209, 197, 0.3);
+    }
+    .feature-card {
+        transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(79, 209, 197, 0.4);
+    }
+    .feature-icon {
+        transition: all 0.3s ease;
+    }
+    .feature-card:hover .feature-icon {
+        transform: scale(1.2);
+    }
+</style>
+<!-- Load Three.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg rounded-lg shadow-2xl overflow-hidden mb-12 h-[600px]">
+    <!-- 3D Animation Container -->
+    <div id="animation-container"></div>
+    
+    <!-- Hero Content -->
+    <div class="px-6 py-12 md:px-12 md:py-20 text-center md:text-left h-full flex items-center">
+        <div class="hero-content p-8 max-w-3xl">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white glow-effect">
+                <span class="text-phantom-accent">PhantomStrike</span> Web Vulnerability Scanner
+            </h1>
+            <p class="text-xl text-gray-300 mb-8">
+                Powerful, intelligent scanning to detect vulnerabilities in your web applications. 
+                Leveraging AI to provide actionable insights and remediation suggestions.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="{{ url_for('main.scan') }}" class="bg-phantom-accent hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-md transition duration-300 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-phantom-accent/30">
+                    <i class="fas fa-search mr-2"></i> Start Scanning Now
+                </a>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.signup') }}" class="bg-gray-700/80 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md transition duration-300 flex items-center justify-center backdrop-blur-sm">
+                    <i class="fas fa-user-plus mr-2"></i> Sign Up for Full Access
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center text-phantom-accent glow-effect">Powerful Security Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Comprehensive Scanning -->
+        <div class="feature-card bg-phantom-secondary p-6 rounded-lg shadow-md border border-transparent hover:border-phantom-accent/50">
+            <div class="feature-icon rounded-full bg-phantom-primary p-3 w-14 h-14 flex items-center justify-center mb-4 border-2 border-phantom-accent/20">
+                <svg class="w-8 h-8 text-phantom-accent">
+                    <use xlink:href="/static/img/security_icons.svg#icon-security"></use>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Comprehensive Scanning</h3>
+            <p class="text-gray-300">
+                Detect a wide range of vulnerabilities including SQL Injection, XSS, CSRF, authentication issues, and more with our advanced detection engine.
+            </p>
+            <div class="mt-4 pt-4 border-t border-phantom-primary">
+                <div class="flex items-center text-phantom-accent">
+                    <svg class="w-4 h-4 mr-2">
+                        <use xlink:href="/static/img/security_icons.svg#icon-sqli"></use>
+                    </svg>
+                    <span class="text-sm">SQL Injection</span>
+                </div>
+                <div class="flex items-center text-phantom-accent mt-1">
+                    <svg class="w-4 h-4 mr-2">
+                        <use xlink:href="/static/img/security_icons.svg#icon-xss"></use>
+                    </svg>
+                    <span class="text-sm">Cross-Site Scripting</span>
+                </div>
+            </div>
+        </div>
+        <!-- AI-Powered Remediation -->
+        <div class="feature-card bg-phantom-secondary p-6 rounded-lg shadow-md border border-transparent hover:border-phantom-accent/50">
+            <div class="feature-icon rounded-full bg-phantom-primary p-3 w-14 h-14 flex items-center justify-center mb-4 border-2 border-phantom-accent/20">
+                <i class="fas fa-robot text-phantom-accent text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">AI-Powered Remediation</h3>
+            <p class="text-gray-300">
+                Get intelligent suggestions for fixing vulnerabilities using DeepAI integration, including example code snippets and detailed explanations.
+            </p>
+            <div class="mt-4 flex items-center justify-between">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-phantom-primary text-phantom-accent">
+                    <i class="fas fa-code mr-1"></i> Code Snippets
+                </span>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-phantom-primary text-phantom-accent">
+                    <i class="fas fa-lightbulb mr-1"></i> Smart Fixes
+                </span>
+            </div>
+        </div>
+        <!-- Tiered Access -->
+        <div class="feature-card bg-phantom-secondary p-6 rounded-lg shadow-md border border-transparent hover:border-phantom-accent/50">
+            <div class="feature-icon rounded-full bg-phantom-primary p-3 w-14 h-14 flex items-center justify-center mb-4 border-2 border-phantom-accent/20">
+                <svg class="w-8 h-8 text-phantom-accent">
+                    <use xlink:href="/static/img/security_icons.svg#icon-shield"></use>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Tiered Access</h3>
+            <p class="text-gray-300">
+                Choose from light, medium, or deep scans depending on your needs. Get network scanning capabilities with authenticated access.
+            </p>
+            <div class="mt-4 grid grid-cols-3 gap-2">
+                <div class="text-center p-2 bg-phantom-primary rounded-md text-xs font-medium">
+                    <div class="text-gray-300">Light</div>
+                    <div class="text-phantom-accent">5 min</div>
+                </div>
+                <div class="text-center p-2 bg-phantom-primary rounded-md text-xs font-medium">
+                    <div class="text-gray-300">Medium</div>
+                    <div class="text-phantom-accent">10 min</div>
+                </div>
+                <div class="text-center p-2 bg-phantom-primary rounded-md text-xs font-medium">
+                    <div class="text-gray-300">Deep</div>
+                    <div class="text-phantom-accent">20 min</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Scan Types Section -->
+<section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center text-phantom-accent glow-effect">Scan Types</h2>
+    <div class="relative">
+        <!-- Background accents -->
+        <div class="absolute -top-5 -left-5 w-20 h-20 bg-phantom-accent/10 rounded-full blur-xl"></div>
+        <div class="absolute -bottom-5 -right-5 w-20 h-20 bg-phantom-accent/10 rounded-full blur-xl"></div>
+        
+        <!-- Main content -->
+        <div class="relative bg-phantom-secondary p-6 rounded-lg shadow-xl border border-phantom-accent/20 backdrop-blur-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-phantom-primary/50 p-6 rounded-lg transition-all hover:bg-phantom-primary/70">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-user text-gray-400 mr-2"></i> Guest Access
+                        </h3>
+                        <span class="bg-phantom-accent/20 text-phantom-accent text-xs px-2 py-1 rounded">Free</span>
+                    </div>
+                    <div class="mb-6 border-b border-phantom-secondary pb-4">
+                        <p class="text-gray-300 text-sm">Quick vulnerability checks without account creation</p>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Light scans</span> 
+                                <p class="text-xs text-gray-400">Basic vulnerability detection</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Summary results</span>
+                                <p class="text-xs text-gray-400">Vulnerability counts and severity levels</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Basic visualization</span>
+                                <p class="text-xs text-gray-400">Simple charts and statistics</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start opacity-50">
+                            <i class="fas fa-times text-gray-500 mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Detailed information</span>
+                                <p class="text-xs text-gray-400">Specific vulnerability details</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start opacity-50">
+                            <i class="fas fa-times text-gray-500 mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Export functionality</span>
+                                <p class="text-xs text-gray-400">Save results for later analysis</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-phantom-secondary">
+                        <a href="{{ url_for('main.scan') }}" class="block text-center bg-phantom-accent/20 hover:bg-phantom-accent/40 text-phantom-accent py-2 px-4 rounded transition-all">
+                            Start Guest Scan
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-phantom-primary/50 to-phantom-primary p-6 rounded-lg shadow-lg border border-phantom-accent/30 transition-all hover:shadow-phantom-accent/20">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-user-shield text-phantom-accent mr-2"></i> Authenticated Access
+                        </h3>
+                        <span class="bg-phantom-accent/30 text-phantom-accent text-xs px-2 py-1 rounded font-bold">Premium</span>
+                    </div>
+                    <div class="mb-6 border-b border-phantom-secondary pb-4">
+                        <p class="text-gray-300 text-sm">Full access to all scanning features and detailed remediation</p>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Multiple scan options</span>
+                                <p class="text-xs text-gray-400">Light, medium, and deep scanning capabilities</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Network scanning</span>
+                                <p class="text-xs text-gray-400">Port scanning and network vulnerability detection</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Detailed reports</span>
+                                <p class="text-xs text-gray-400">Comprehensive vulnerability information</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">AI remediation</span>
+                                <p class="text-xs text-gray-400">Smart code suggestions to fix vulnerabilities</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-phantom-accent mr-2 mt-1"></i>
+                            <div>
+                                <span class="font-medium">Export results</span>
+                                <p class="text-xs text-gray-400">JSON, CSV, or PDF format exports</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-phantom-secondary">
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('main.scan') }}" class="block text-center bg-phantom-accent hover:bg-teal-600 text-white py-2 px-4 rounded transition-all">
+                            Start Premium Scan
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('auth.signup') }}" class="block text-center bg-phantom-accent hover:bg-teal-600 text-white py-2 px-4 rounded transition-all">
+                            Sign Up For Full Access
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Scan Results -->
+{% if recent_scans %}
+<section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center text-phantom-accent">Recent Guest Scans</h2>
+    <div class="bg-phantom-secondary rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-700">
+                <thead class="bg-phantom-primary">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Target</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total Vulnerabilities</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Severity</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-phantom-secondary divide-y divide-gray-700">
+                    {% for scan in recent_scans %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                            {{ scan.target_url | truncate(30) }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if scan.status == 'completed' %}bg-green-800 text-green-100
+                                {% elif scan.status == 'running' %}bg-blue-800 text-blue-100
+                                {% elif scan.status == 'failed' %}bg-red-800 text-red-100
+                                {% else %}bg-yellow-800 text-yellow-100{% endif %}">
+                                {{ scan.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            {{ scan.total_vulnerabilities }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <div class="flex space-x-1">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-900 text-red-100">
+                                    H: {{ scan.high_severity }}
+                                </span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-800 text-yellow-100">
+                                    M: {{ scan.medium_severity }}
+                                </span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-800 text-green-100">
+                                    L: {{ scan.low_severity }}
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <a href="{{ url_for('main.scan_result', scan_id=scan.id) }}" class="text-phantom-accent hover:text-teal-300">
+                                View Results
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Vulnerability Types Section -->
+<section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center text-phantom-accent">Vulnerability Detection</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- SQL Injection -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-database text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">SQL Injection</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Detects when user input can manipulate database queries, potentially allowing data theft or corruption.</p>
+        </div>
+        
+        <!-- Cross-Site Scripting -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-code text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Cross-Site Scripting (XSS)</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Identifies vulnerabilities where malicious scripts can be injected into web pages viewed by other users.</p>
+        </div>
+        
+        <!-- CSRF -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-exchange-alt text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Cross-Site Request Forgery</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Detects when applications fail to verify that requests come from an authenticated user.</p>
+        </div>
+        
+        <!-- LFI/RFI -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-file-import text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">File Inclusion</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Identifies when applications permit inclusion of files from local sources (LFI) or remote locations (RFI).</p>
+        </div>
+        
+        <!-- Directory Traversal -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-folder-open text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Directory Traversal</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Detects when applications allow attackers to access files and directories outside intended paths.</p>
+        </div>
+        
+        <!-- Authentication Issues -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-key text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Authentication Issues</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Identifies weaknesses in login mechanisms, session management, and credential security.</p>
+        </div>
+        
+        <!-- Security Misconfigurations -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-wrench text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Security Misconfigurations</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Detects insecure default configurations, open cloud storage, error messages that leak info, and more.</p>
+        </div>
+        
+        <!-- Sensitive Data Exposure -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-eye text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Sensitive Data Exposure</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Identifies when sensitive data is transmitted unencrypted or stored insecurely.</p>
+        </div>
+        
+        <!-- IDOR -->
+        <div class="bg-phantom-secondary p-5 rounded-lg shadow-md">
+            <div class="flex items-center mb-3">
+                <div class="bg-phantom-primary p-2 rounded-md mr-3">
+                    <i class="fas fa-random text-phantom-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Insecure Direct Object Reference</h3>
+            </div>
+            <p class="text-gray-400 text-sm">Detects when applications expose references to internal objects, allowing unauthorized access.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-gradient-to-r from-phantom-primary to-phantom-secondary rounded-lg shadow-xl p-8 mb-8 mt-12">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold mb-4 text-white">Ready to secure your web applications?</h2>
+        <p class="text-gray-300 mb-6 max-w-xl mx-auto">
+            Start with a free light scan or sign up for full access to our advanced vulnerability scanning features.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="{{ url_for('main.scan') }}" class="bg-phantom-accent hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-md transition duration-300">
+                Start Free Scan
+            </a>
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.signup') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md transition duration-300">
+                Sign Up for Full Access
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include our Three.js animation script -->
+<script src="{{ url_for('static', filename='js/three-animation.js') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add custom scroll animations
+        const featureCards = document.querySelectorAll('.feature-card');
+        
+        // Simple scroll-based animations for feature cards
+        window.addEventListener('scroll', function() {
+            featureCards.forEach(card => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    card.classList.add('opacity-100', 'translate-y-0');
+                    card.classList.remove('opacity-0', 'translate-y-10');
+                } else {
+                    card.classList.add('opacity-0', 'translate-y-10');
+                    card.classList.remove('opacity-100', 'translate-y-0');
+                }
+            });
+        });
+        
+        // Trigger initial animation check
+        setTimeout(() => {
+            window.dispatchEvent(new Event('scroll'));
+        }, 100);
+        
+        // Add hover interactions for buttons
+        const buttons = document.querySelectorAll('.bg-phantom-accent, .text-phantom-accent');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.classList.add('pulse-animation');
+            });
+            button.addEventListener('mouseleave', function() {
+                this.classList.remove('pulse-animation');
+            });
+        });
+    });
+</script>
+
+<style>
+    /* Add animations */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .pulse-animation {
+        animation: pulse 0.5s ease-in-out;
+    }
+    
+    .feature-card {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+</style>
+{% endblock %}

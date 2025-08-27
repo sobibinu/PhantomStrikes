@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+
+{% block title %}PhantomStrike - {% if signup_mode %}Sign Up{% else %}Login{% endif %}{% endblock %}
+
+{% block head %}
+<style>
+    .auth-bg {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(45, 55, 72, 0.9));
+    }
+    
+    .auth-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(79, 209, 197, 0.1) 0%, transparent 20%),
+            radial-gradient(circle at 90% 80%, rgba(79, 209, 197, 0.1) 0%, transparent 20%);
+        pointer-events: none;
+    }
+    
+    .auth-bg .cybersecurity-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        background-size: 50px 50px;
+        background-image: 
+            linear-gradient(0deg, transparent 24%, rgba(79, 209, 197, 0.3) 25%, rgba(79, 209, 197, 0.3) 26%, transparent 27%, transparent 74%, rgba(79, 209, 197, 0.3) 75%, rgba(79, 209, 197, 0.3) 76%, transparent 77%, transparent),
+            linear-gradient(90deg, transparent 24%, rgba(79, 209, 197, 0.3) 25%, rgba(79, 209, 197, 0.3) 26%, transparent 27%, transparent 74%, rgba(79, 209, 197, 0.3) 75%, rgba(79, 209, 197, 0.3) 76%, transparent 77%, transparent);
+    }
+    
+    .glow-text {
+        text-shadow: 0 0 10px rgba(79, 209, 197, 0.5);
+    }
+    
+    .form-container {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        background-color: rgba(45, 55, 72, 0.7);
+        border: 1px solid rgba(79, 209, 197, 0.2);
+    }
+    
+    .form-input {
+        transition: all 0.3s ease;
+        background-color: rgba(26, 32, 44, 0.7);
+        border: 1px solid rgba(79, 209, 197, 0.2);
+    }
+    
+    .form-input:focus {
+        border-color: rgba(79, 209, 197, 0.8);
+        box-shadow: 0 0 0 2px rgba(79, 209, 197, 0.2);
+    }
+    
+    .auth-button {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .auth-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+        transition: transform 0.3s ease;
+    }
+    
+    .auth-button:focus::after {
+        opacity: 0.3;
+        transform: scale(50, 50) translate(-50%);
+    }
+    
+    .test-creds-box {
+        background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(45, 55, 72, 0.9));
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgba(79, 209, 197, 0.3);
+    }
+    
+    .cred-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(79, 209, 197, 0.1);
+        padding: 0.5rem 0;
+    }
+    
+    .cred-item:last-child {
+        border-bottom: none;
+    }
+    
+    .copy-button {
+        transition: all 0.2s ease;
+    }
+    
+    .copy-button:hover {
+        transform: scale(1.1);
+    }
+</style>
+
+<!-- Add clipboard.js for copy functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen -mt-16">
+    <div class="w-full max-w-md">
+        <!-- Main authentication card -->
+        <div class="flex flex-col bg-phantom-secondary rounded-lg shadow-2xl overflow-hidden form-container">
+            <div class="auth-bg px-6 py-8 text-center relative">
+                <!-- Cybersecurity pattern background -->
+                <div class="cybersecurity-pattern"></div>
+                
+                <!-- Floating animated lock icon -->
+                <div class="absolute top-8 right-8 animate-pulse">
+                    <svg class="w-8 h-8 text-phantom-accent opacity-70">
+                        <use xlink:href="/static/img/security_icons.svg#icon-shield"></use>
+                    </svg>
+                </div>
+                
+                <h1 class="text-3xl font-bold text-white mb-2 glow-text">
+                    {% if signup_mode %}Create Account{% else %}Welcome Back{% endif %}
+                </h1>
+                <p class="text-gray-300">
+                    {% if signup_mode %}
+                    Join PhantomStrike for full scanning capabilities
+                    {% else %}
+                    Sign in to access your dashboard
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Tab Navigation with animated indicator -->
+            <div class="flex border-b border-phantom-primary">
+                <a href="{{ url_for('auth.login') }}" class="w-1/2 py-3 text-center font-medium text-sm relative {% if not signup_mode %}text-phantom-accent{% else %}text-gray-400 hover:text-white hover:bg-phantom-secondary/50{% endif %}">
+                    Login
+                    {% if not signup_mode %}
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-phantom-accent"></span>
+                    {% endif %}
+                </a>
+                <a href="{{ url_for('auth.signup') }}" class="w-1/2 py-3 text-center font-medium text-sm relative {% if signup_mode %}text-phantom-accent{% else %}text-gray-400 hover:text-white hover:bg-phantom-secondary/50{% endif %}">
+                    Sign Up
+                    {% if signup_mode %}
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-phantom-accent"></span>
+                    {% endif %}
+                </a>
+            </div>
+
+            <div class="p-6">
+                {% if signup_mode %}
+                <!-- Sign Up Form -->
+                <form method="POST" action="{{ url_for('auth.signup') }}">
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="username">
+                            Username
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="username" name="username" type="text" placeholder="Username" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="email">
+                            Email
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="email" name="email" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="password">
+                            Password
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="password" name="password" type="password" placeholder="********" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="confirm_password">
+                            Confirm Password
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="confirm_password" name="confirm_password" type="password" placeholder="********" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="auth-button bg-phantom-accent hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 w-full" type="submit">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+                {% else %}
+                <!-- Login Form -->
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="email">
+                            Email
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="email" name="email" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="password">
+                            Password
+                        </label>
+                        <input class="form-input shadow appearance-none rounded w-full py-2 px-3 text-white leading-tight focus:outline-none" 
+                            id="password" name="password" type="password" placeholder="********" required>
+                        <p class="text-gray-400 text-xs italic mt-1">Forgot your password?</p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="auth-button bg-phantom-accent hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 w-full" type="submit">
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+
+                <!-- OAuth Options -->
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-700"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-phantom-secondary text-gray-400">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <a href="{{ url_for('auth.oauth_google') }}" class="w-full flex justify-center items-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gradient-to-r from-gray-900 to-phantom-secondary text-sm font-medium text-white hover:from-phantom-secondary hover:to-phantom-primary transition-all duration-300">
+                            <i class="fab fa-google text-red-500 mr-2"></i> Google
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Credentials Box -->
+        <div class="test-creds-box mt-6 p-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-phantom-accent font-bold glow-text">Test Credentials</h3>
+                <div class="text-xs text-gray-400">For demonstration purposes</div>
+            </div>
+            
+            <!-- Admin Credentials -->
+            <div class="mb-4">
+                <div class="text-white text-sm font-medium mb-2">Admin User</div>
+                <div class="cred-item">
+                    <div class="text-gray-300 text-xs">Email:</div>
+                    <div class="flex items-center">
+                        <code class="bg-phantom-primary text-phantom-accent text-xs px-2 py-1 rounded">admin@phantomstrike.com</code>
+                        <button class="copy-button ml-2 text-gray-400 hover:text-phantom-accent" data-clipboard-text="admin@phantomstrike.com">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="cred-item">
+                    <div class="text-gray-300 text-xs">Password:</div>
+                    <div class="flex items-center">
+                        <code class="bg-phantom-primary text-phantom-accent text-xs px-2 py-1 rounded">Admin@123</code>
+                        <button class="copy-button ml-2 text-gray-400 hover:text-phantom-accent" data-clipboard-text="Admin@123">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test User Credentials -->
+            <div>
+                <div class="text-white text-sm font-medium mb-2">Regular User</div>
+                <div class="cred-item">
+                    <div class="text-gray-300 text-xs">Email:</div>
+                    <div class="flex items-center">
+                        <code class="bg-phantom-primary text-phantom-accent text-xs px-2 py-1 rounded">test@phantomstrike.com</code>
+                        <button class="copy-button ml-2 text-gray-400 hover:text-phantom-accent" data-clipboard-text="test@phantomstrike.com">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="cred-item">
+                    <div class="text-gray-300 text-xs">Password:</div>
+                    <div class="flex items-center">
+                        <code class="bg-phantom-primary text-phantom-accent text-xs px-2 py-1 rounded">Test@123</code>
+                        <button class="copy-button ml-2 text-gray-400 hover:text-phantom-accent" data-clipboard-text="Test@123">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize clipboard.js for copying test credentials
+        var clipboard = new ClipboardJS('.copy-button');
+        
+        clipboard.on('success', function(e) {
+            // Change the icon temporarily to indicate success
+            const icon = e.trigger.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-copy');
+                icon.classList.add('fa-check');
+                
+                // Create a small tooltip notification
+                const tooltip = document.createElement('div');
+                tooltip.className = 'absolute -top-8 left-1/2 transform -translate-x-1/2 bg-phantom-accent/90 text-white text-xs py-1 px-2 rounded shadow-lg';
+                tooltip.innerHTML = 'Copied!';
+                e.trigger.style.position = 'relative';
+                e.trigger.appendChild(tooltip);
+                
+                // Reset after a short delay
+                setTimeout(function() {
+                    icon.classList.remove('fa-check');
+                    icon.classList.add('fa-copy');
+                    if (tooltip && tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
+                }, 1500);
+            }
+            
+            e.clearSelection();
+        });
+        
+        // Add floating animation to the shield icon
+        const shieldIcon = document.querySelector('.auth-bg .animate-pulse');
+        if (shieldIcon) {
+            let direction = 1;
+            let position = 0;
+            
+            function animateShield() {
+                position += (0.1 * direction);
+                if (position > 5) direction = -1;
+                if (position < 0) direction = 1;
+                
+                shieldIcon.style.transform = `translateY(${position}px)`;
+                requestAnimationFrame(animateShield);
+            }
+            
+            animateShield();
+        }
+        
+        // Add ripple effect to buttons
+        const buttons = document.querySelectorAll('.auth-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const ripple = document.createElement('span');
+                ripple.className = 'absolute bg-white rounded-full opacity-30';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.width = '1px';
+                ripple.style.height = '1px';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.transition = 'transform 1s, opacity 0.8s';
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.style.transform = 'scale(100)';
+                    ripple.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => {
+                    if (ripple && ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 1000);
+            });
+        });
+    });
+</script>
+{% endblock %}
